@@ -1,0 +1,647 @@
+{
+  "hotel": {
+    "name": "PRASHIV",
+    "type": "Luxury Hotel & Resort",
+    "description": "PRASHIV is a premium hotel offering comfortable rooms, modern amenities, quality dining, and personalized guest assistance.",
+    "location": "Chennai, Tamil Nadu, India",
+    "checkIn": "2:00 PM",
+    "checkOut": "11:00 AM",
+    "earlyCheckIn": "Subject to room availability.",
+    "lateCheckOut": "Subject to availability and additional charges.",
+    "breakfast": "Breakfast is optional and can be added to the booking for ₹500 per adult per night.",
+    "wifi": "Free Wi-Fi is available throughout the hotel.",
+    "parking": "Free parking is available for hotel guests.",
+    "reception": "24-hour front desk assistance is available.",
+    "languagesSupported": [
+      "English",
+      "Tamil",
+      "Hindi"
+    ]
+  },
+
+  "rooms": [
+    {
+      "id": "standard",
+      "name": "Standard Room",
+      "capacity": 2,
+      "pricePerNight": 3000,
+      "description": "A comfortable room suitable for couples or solo travelers.",
+      "bedType": "Queen Bed",
+      "size": "280 sq ft",
+      "view": "City View",
+      "amenities": [
+        "Free Wi-Fi",
+        "Air conditioning",
+        "Smart TV",
+        "Work desk",
+        "Attached bathroom",
+        "Complimentary toiletries",
+        "Hair dryer",
+        "Electric kettle",
+        "Wardrobe"
+      ]
+    },
+    {
+      "id": "deluxe",
+      "name": "Deluxe Room",
+      "capacity": 3,
+      "pricePerNight": 4500,
+      "description": "A spacious room with additional comfort and amenities, suitable for up to three guests.",
+      "bedType": "King Bed",
+      "size": "360 sq ft",
+      "view": "City View",
+      "amenities": [
+        "Free Wi-Fi",
+        "Air conditioning",
+        "Smart TV",
+        "Mini refrigerator",
+        "Work desk",
+        "Attached bathroom",
+        "Complimentary toiletries",
+        "Hair dryer",
+        "Electric kettle",
+        "Wardrobe",
+        "Seating area"
+      ]
+    },
+    {
+      "id": "family-suite",
+      "name": "Family Suite",
+      "capacity": 4,
+      "pricePerNight": 7000,
+      "description": "A spacious suite designed for families or groups of up to four guests.",
+      "bedType": "King Bed + Sofa Bed",
+      "size": "550 sq ft",
+      "view": "Premium City View",
+      "amenities": [
+        "Free Wi-Fi",
+        "Air conditioning",
+        "Smart TV",
+        "Mini refrigerator",
+        "Living area",
+        "Work desk",
+        "Attached bathroom",
+        "Complimentary toiletries",
+        "Hair dryer",
+        "Electric kettle",
+        "Wardrobe",
+        "Dining area",
+        "Sofa"
+      ]
+    }
+  ],
+
+  "roomInventory": {
+    "standard": 10,
+    "deluxe": 6,
+    "family-suite": 3
+  },
+
+  "bookings": [
+    {
+      "roomType": "deluxe",
+      "checkIn": "2026-10-10",
+      "checkOut": "2026-10-12",
+      "rooms": 1
+    },
+    {
+      "roomType": "standard",
+      "checkIn": "2026-10-15",
+      "checkOut": "2026-10-18",
+      "rooms": 2
+    },
+    {
+      "roomType": "family-suite",
+      "checkIn": "2026-10-20",
+      "checkOut": "2026-10-23",
+      "rooms": 1
+    }
+  ],
+
+  "amenities": [
+    {
+      "name": "Swimming Pool",
+      "available": true,
+      "timings": "6:00 AM - 9:00 PM",
+      "details": "Outdoor swimming pool available for hotel guests."
+    },
+    {
+      "name": "Fitness Center",
+      "available": true,
+      "timings": "6:00 AM - 10:00 PM",
+      "details": "Fully equipped fitness center available for hotel guests."
+    },
+    {
+      "name": "Restaurant",
+      "available": true,
+      "timings": "7:00 AM - 11:00 PM",
+      "details": "Multi-cuisine restaurant serving breakfast, lunch, dinner and beverages."
+    },
+    {
+      "name": "Free Wi-Fi",
+      "available": true,
+      "details": "High-speed Wi-Fi is available throughout the hotel."
+    },
+    {
+      "name": "Free Parking",
+      "available": true,
+      "details": "Complimentary parking is available for hotel guests."
+    },
+    {
+      "name": "24/7 Front Desk",
+      "available": true,
+      "details": "Front desk assistance is available 24 hours a day."
+    },
+    {
+      "name": "Spa",
+      "available": true,
+      "timings": "10:00 AM - 9:00 PM",
+      "details": "Relaxation and wellness treatments are available by appointment."
+    },
+    {
+      "name": "Business Center",
+      "available": true,
+      "timings": "8:00 AM - 8:00 PM",
+      "details": "Business facilities are available for guests."
+    },
+    {
+      "name": "Conference Hall",
+      "available": true,
+      "details": "Conference and meeting facilities are available for corporate events."
+    }
+  ],
+
+  "dining": {
+    "restaurant": {
+      "name": "PRASHIV Restaurant",
+      "type": "Multi-Cuisine Restaurant",
+      "cuisine": [
+        "South Indian",
+        "North Indian",
+        "Indian",
+        "Continental",
+        "Asian"
+      ],
+      "timings": {
+        "breakfast": "7:00 AM - 10:30 AM",
+        "lunch": "12:30 PM - 3:30 PM",
+        "dinner": "7:00 PM - 11:00 PM"
+      },
+      "description": "PRASHIV Restaurant offers a wide selection of vegetarian and non-vegetarian dishes."
+    },
+
+    "breakfastOption": {
+      "available": true,
+      "optional": true,
+      "pricePerAdultPerNight": 500,
+      "timings": "7:00 AM - 10:30 AM"
+    },
+
+    "foodMenu": {
+      "vegetarian": [
+        {
+          "name": "Paneer Butter Masala",
+          "category": "North Indian",
+          "price": 280,
+          "description": "Paneer cooked in a creamy tomato and butter gravy."
+        },
+        {
+          "name": "Veg Biryani",
+          "category": "Indian",
+          "price": 260,
+          "description": "Fragrant basmati rice cooked with vegetables and aromatic spices."
+        },
+        {
+          "name": "Vegetable Fried Rice",
+          "category": "Asian",
+          "price": 240,
+          "description": "Fried rice prepared with fresh vegetables and Asian seasonings."
+        },
+        {
+          "name": "Gobi Manchurian",
+          "category": "Asian",
+          "price": 220,
+          "description": "Crispy cauliflower tossed in a mildly spicy Manchurian sauce."
+        },
+        {
+          "name": "Dal Tadka",
+          "category": "North Indian",
+          "price": 200,
+          "description": "Yellow lentils tempered with Indian spices."
+        },
+        {
+          "name": "Kadai Paneer",
+          "category": "North Indian",
+          "price": 290,
+          "description": "Paneer cooked with bell peppers, onions and spices."
+        },
+        {
+          "name": "Veg Noodles",
+          "category": "Asian",
+          "price": 230,
+          "description": "Noodles tossed with vegetables and Asian sauces."
+        },
+        {
+          "name": "Masala Dosa",
+          "category": "South Indian",
+          "price": 140,
+          "description": "Crispy dosa served with potato masala, sambar and chutney."
+        },
+        {
+          "name": "Idli Sambar",
+          "category": "South Indian",
+          "price": 100,
+          "description": "Soft steamed idlis served with sambar and chutneys."
+        },
+        {
+          "name": "Vegetable Pasta",
+          "category": "Continental",
+          "price": 280,
+          "description": "Pasta prepared with seasonal vegetables and creamy sauce."
+        }
+      ],
+
+      "nonVegetarian": [
+        {
+          "name": "Chicken Biryani",
+          "category": "Indian",
+          "price": 350,
+          "description": "Aromatic basmati rice cooked with marinated chicken and spices."
+        },
+        {
+          "name": "Chicken Butter Masala",
+          "category": "North Indian",
+          "price": 320,
+          "description": "Tender chicken cooked in a creamy tomato and butter gravy."
+        },
+        {
+          "name": "Chicken Tikka",
+          "category": "North Indian",
+          "price": 340,
+          "description": "Grilled marinated chicken pieces cooked with Indian spices."
+        },
+        {
+          "name": "Chicken Fried Rice",
+          "category": "Asian",
+          "price": 290,
+          "description": "Fried rice prepared with chicken, vegetables and Asian seasonings."
+        },
+        {
+          "name": "Chicken Noodles",
+          "category": "Asian",
+          "price": 280,
+          "description": "Noodles tossed with chicken, vegetables and sauces."
+        },
+        {
+          "name": "Pepper Chicken",
+          "category": "South Indian",
+          "price": 330,
+          "description": "Chicken cooked with black pepper, onions and South Indian spices."
+        },
+        {
+          "name": "Fish Curry",
+          "category": "South Indian",
+          "price": 360,
+          "description": "Fresh fish cooked in a traditional South Indian curry."
+        },
+        {
+          "name": "Grilled Fish",
+          "category": "Continental",
+          "price": 420,
+          "description": "Grilled fish served with vegetables and a light sauce."
+        },
+        {
+          "name": "Mutton Biryani",
+          "category": "Indian",
+          "price": 450,
+          "description": "Aromatic basmati rice prepared with tender mutton and spices."
+        },
+        {
+          "name": "Egg Fried Rice",
+          "category": "Asian",
+          "price": 250,
+          "description": "Fried rice prepared with eggs, vegetables and Asian seasonings."
+        }
+      ],
+
+      "starters": [
+        {
+          "name": "Paneer Tikka",
+          "type": "Vegetarian",
+          "price": 260
+        },
+        {
+          "name": "Crispy Corn",
+          "type": "Vegetarian",
+          "price": 220
+        },
+        {
+          "name": "Chicken 65",
+          "type": "Non-Vegetarian",
+          "price": 300
+        },
+        {
+          "name": "Chicken Wings",
+          "type": "Non-Vegetarian",
+          "price": 340
+        },
+        {
+          "name": "Fish Fingers",
+          "type": "Non-Vegetarian",
+          "price": 380
+        }
+      ],
+
+      "soups": [
+        {
+          "name": "Tomato Soup",
+          "type": "Vegetarian",
+          "price": 140
+        },
+        {
+          "name": "Sweet Corn Soup",
+          "type": "Vegetarian",
+          "price": 150
+        },
+        {
+          "name": "Hot and Sour Soup",
+          "type": "Vegetarian",
+          "price": 160
+        },
+        {
+          "name": "Chicken Clear Soup",
+          "type": "Non-Vegetarian",
+          "price": 180
+        },
+        {
+          "name": "Chicken Hot and Sour Soup",
+          "type": "Non-Vegetarian",
+          "price": 190
+        }
+      ],
+
+      "desserts": [
+        {
+          "name": "Gulab Jamun",
+          "price": 120
+        },
+        {
+          "name": "Chocolate Brownie",
+          "price": 180
+        },
+        {
+          "name": "Vanilla Ice Cream",
+          "price": 120
+        },
+        {
+          "name": "Chocolate Ice Cream",
+          "price": 140
+        },
+        {
+          "name": "Fruit Salad",
+          "price": 160
+        },
+        {
+          "name": "Caramel Custard",
+          "price": 150
+        }
+      ],
+
+      "beverages": [
+        {
+          "name": "Fresh Lime Soda",
+          "price": 100
+        },
+        {
+          "name": "Fresh Orange Juice",
+          "price": 140
+        },
+        {
+          "name": "Watermelon Juice",
+          "price": 130
+        },
+        {
+          "name": "Mango Milkshake",
+          "price": 180
+        },
+        {
+          "name": "Cold Coffee",
+          "price": 180
+        },
+        {
+          "name": "Masala Tea",
+          "price": 90
+        },
+        {
+          "name": "Filter Coffee",
+          "price": 100
+        },
+        {
+          "name": "Mineral Water",
+          "price": 50
+        }
+      ]
+    },
+
+    "roomService": {
+      "available": true,
+      "timings": "7:00 AM - 11:00 PM",
+      "details": "Guests can order selected food and beverages directly to their rooms."
+    },
+
+    "dietaryOptions": [
+      "Vegetarian",
+      "Non-Vegetarian",
+      "Egg-based dishes",
+      "Mild-spice options",
+      "Spicy options"
+    ],
+
+    "specialRequests": "Guests can ask the restaurant about allergy-related or customized meal requests. Availability depends on the kitchen."
+  },
+
+  "services": [
+    {
+      "name": "Room Service",
+      "available": true,
+      "timings": "7:00 AM - 11:00 PM"
+    },
+    {
+      "name": "Housekeeping",
+      "available": true,
+      "timings": "8:00 AM - 8:00 PM"
+    },
+    {
+      "name": "Laundry Service",
+      "available": true,
+      "timings": "8:00 AM - 8:00 PM"
+    },
+    {
+      "name": "Airport Transfer",
+      "available": true,
+      "details": "Airport transfer can be arranged on request and may involve additional charges."
+    },
+    {
+      "name": "Luggage Assistance",
+      "available": true,
+      "timings": "24 hours"
+    },
+    {
+      "name": "Wake-up Call",
+      "available": true,
+      "details": "Guests can request a wake-up call through the front desk."
+    },
+    {
+      "name": "Doctor on Call",
+      "available": true,
+      "details": "Doctor-on-call assistance can be arranged through the front desk."
+    },
+    {
+      "name": "Taxi Assistance",
+      "available": true,
+      "details": "Taxi arrangements can be requested through the front desk."
+    }
+  ],
+
+  "spa": {
+    "available": true,
+    "name": "PRASHIV Wellness Spa",
+    "timings": "10:00 AM - 9:00 PM",
+    "services": [
+      {
+        "name": "Relaxation Massage",
+        "duration": "60 minutes",
+        "price": 1800
+      },
+      {
+        "name": "Aromatherapy Massage",
+        "duration": "60 minutes",
+        "price": 2200
+      },
+      {
+        "name": "Head and Shoulder Massage",
+        "duration": "30 minutes",
+        "price": 1000
+      },
+      {
+        "name": "Foot Massage",
+        "duration": "30 minutes",
+        "price": 900
+      }
+    ],
+    "booking": "Spa services should be booked in advance and are subject to availability."
+  },
+
+  "businessFacilities": {
+    "available": true,
+    "meetingRooms": 2,
+    "conferenceHall": true,
+    "projector": true,
+    "highSpeedInternet": true,
+    "printing": true,
+    "details": "Business facilities are available for meetings, presentations and small corporate events."
+  },
+
+  "policies": {
+    "children": "Children are welcome.",
+    "pets": "Pets are not allowed.",
+    "smoking": "Smoking is not permitted inside guest rooms.",
+    "payment": [
+      "Credit cards",
+      "Debit cards",
+      "UPI",
+      "Digital payments"
+    ],
+    "cancellation": "Free cancellation is available up to 24 hours before check-in. Cancellation terms may vary depending on the booking.",
+    "extraGuests": "Additional guests are subject to room capacity and applicable charges.",
+    "identification": "Guests may be required to provide valid identification during check-in.",
+    "quietHours": "Guests are requested to maintain low noise levels between 10:00 PM and 7:00 AM.",
+    "parties": "Private parties inside guest rooms are not permitted.",
+    "outsideFood": "Guests should check with the hotel before bringing outside food into common dining areas."
+  },
+
+  "nearbyPlaces": [
+    {
+      "name": "Chennai Central Railway Station",
+      "type": "Transportation",
+      "approxDistance": "8 km"
+    },
+    {
+      "name": "Chennai International Airport",
+      "type": "Airport",
+      "approxDistance": "14 km"
+    },
+    {
+      "name": "Marina Beach",
+      "type": "Beach",
+      "approxDistance": "7 km"
+    },
+    {
+      "name": "Fort St. George",
+      "type": "Historical Attraction",
+      "approxDistance": "9 km"
+    },
+    {
+      "name": "Government Museum Chennai",
+      "type": "Museum",
+      "approxDistance": "5 km"
+    }
+  ],
+
+  "faq": [
+    {
+      "question": "What time is check-in?",
+      "answer": "Standard check-in time is 2:00 PM."
+    },
+    {
+      "question": "What time is check-out?",
+      "answer": "Standard check-out time is 11:00 AM."
+    },
+    {
+      "question": "Does the hotel provide free Wi-Fi?",
+      "answer": "Yes. Free Wi-Fi is available throughout the hotel."
+    },
+    {
+      "question": "Is parking available?",
+      "answer": "Yes. Complimentary parking is available for hotel guests."
+    },
+    {
+      "question": "Does the hotel have a swimming pool?",
+      "answer": "Yes. PRASHIV has an outdoor swimming pool."
+    },
+    {
+      "question": "Does the hotel allow pets?",
+      "answer": "No. Pets are not allowed."
+    },
+    {
+      "question": "Is breakfast available?",
+      "answer": "Yes. Breakfast is available as an optional add-on for ₹500 per adult per night. Breakfast is served from 7:00 AM to 10:30 AM."
+    },
+    {
+      "question": "Does the restaurant have vegetarian food?",
+      "answer": "Yes. The restaurant offers a variety of vegetarian dishes."
+    },
+    {
+      "question": "Does the restaurant serve non-vegetarian food?",
+      "answer": "Yes. Chicken, fish, mutton and egg-based dishes are available."
+    },
+    {
+      "question": "Is room service available?",
+      "answer": "Yes. Room service is available from 7:00 AM to 11:00 PM."
+    },
+    {
+      "question": "Does the hotel have a gym?",
+      "answer": "Yes. The fitness center is open from 6:00 AM to 10:00 PM."
+    },
+    {
+      "question": "Can I request airport transfer?",
+      "answer": "Yes. Airport transfer can be arranged through the hotel, subject to availability and additional charges."
+    }
+  ],
+
+  "contact": {
+    "phone": "+91 98765 43210",
+    "email": "stay@prashivhotel.com",
+    "frontDesk": "Available 24/7"
+  }
+}

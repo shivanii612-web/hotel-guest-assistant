@@ -1,0 +1,1466 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap");
+
+/* ================= RESET ================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ================= ROOT ================= */
+
+:root {
+  --orange: #ff6a00;
+  --orange-light: #ff8a2a;
+  --black: #0a0a0a;
+  --black-soft: #111111;
+  --black-card: #161616;
+  --white: #ffffff;
+  --gray: #a5a5a5;
+  --border: rgba(255, 255, 255, 0.12);
+}
+
+/* ================= APP ================= */
+
+.app {
+  min-height: 100vh;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+  height: 76px;
+  padding: 0 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(18px);
+
+  border-bottom: 1px solid var(--border);
+}
+
+/* LOGO */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--orange);
+  border-radius: 50%;
+
+  color: var(--orange);
+  font-size: 18px;
+}
+
+.logo-name {
+  font-family: "Playfair Display", serif;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.logo-sub {
+  display: block;
+  color: var(--orange);
+  font-size: 8px;
+  letter-spacing: 4px;
+  margin-top: 2px;
+}
+
+/* NAV LINKS */
+
+.navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbar nav a {
+  position: relative;
+
+  color: #dddddd;
+  font-size: 13px;
+  font-weight: 500;
+
+  padding: 29px 0;
+
+  transition: 0.25s ease;
+}
+
+.navbar nav a:hover,
+.navbar nav a.active {
+  color: var(--orange);
+}
+
+.navbar nav a.active::after {
+  content: "";
+
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background: var(--orange);
+}
+
+/* NAV ACTIONS */
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 12px;
+  min-width: 220px;
+}
+
+.theme-btn {
+  width: 40px;
+  height: 40px;
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  background: transparent;
+  color: white;
+
+  font-size: 17px;
+
+  transition: 0.25s ease;
+}
+
+.theme-btn:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.book-btn,
+.primary-btn {
+  border: none;
+  border-radius: 8px;
+
+  background: var(--orange);
+  color: white;
+
+  font-weight: 700;
+
+  padding: 13px 22px;
+
+  transition: 0.25s ease;
+}
+
+.book-btn:hover,
+.primary-btn:hover {
+  background: var(--orange-light);
+  transform: translateY(-2px);
+}
+
+/* ================= HERO ================= */
+
+.hero {
+  min-height: 730px;
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+
+  /*
+    IMPORTANT:
+    Image is now much more visible.
+    Dark overlay is mainly on LEFT side where text appears.
+  */
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.88) 0%,
+      rgba(0, 0, 0, 0.72) 28%,
+      rgba(0, 0, 0, 0.38) 50%,
+      rgba(0, 0, 0, 0.08) 72%,
+      rgba(0, 0, 0, 0.15) 100%
+    ),
+    url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2200&q=95");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/*
+  Extra subtle overlay.
+  This does NOT make the whole image black.
+*/
+
+.hero::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 75% 45%,
+      rgba(255, 106, 0, 0.12),
+      transparent 28%
+    );
+
+  pointer-events: none;
+}
+
+/* HERO CONTENT */
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  width: min(1320px, calc(100% - 100px));
+
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 500px;
+
+  gap: 65px;
+
+  align-items: center;
+}
+
+/* HERO TEXT */
+
+.hero-copy {
+  padding: 60px 0;
+}
+
+.eyebrow {
+  color: var(--orange);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  font-family: "Playfair Display", serif;
+
+  font-size: clamp(55px, 6vw, 88px);
+
+  line-height: 0.98;
+
+  margin: 18px 0 24px;
+
+  letter-spacing: -2px;
+
+  color: #ffffff;
+
+  /*
+    Makes text readable without putting a black box behind it.
+  */
+
+  text-shadow:
+    0 3px 20px rgba(0, 0, 0, 0.45);
+}
+
+.hero p {
+  max-width: 590px;
+
+  color: #eeeeee;
+
+  font-size: 16px;
+  line-height: 1.7;
+
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  margin-top: 30px;
+}
+
+.primary-btn {
+  font-size: 14px;
+  padding: 15px 25px;
+}
+
+.secondary-btn {
+  padding: 14px 22px;
+
+  background: rgba(0, 0, 0, 0.25);
+
+  color: white;
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  border-radius: 8px;
+
+  font-weight: 600;
+
+  backdrop-filter: blur(5px);
+
+  transition: 0.25s ease;
+}
+
+.secondary-btn:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-features {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 25px;
+
+  margin-top: 30px;
+
+  color: #eeeeee;
+
+  font-size: 12px;
+
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.hero-features span:first-child {
+  color: var(--orange);
+}
+
+/* ================= CHAT ================= */
+
+.hero-chat {
+  width: 100%;
+  height: 575px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 106, 0, 0.65);
+
+  border-radius: 18px;
+
+  /*
+    Slight transparency allows hotel image to subtly
+    remain visible around the chat card.
+  */
+
+  background: rgba(12, 12, 12, 0.94);
+
+  box-shadow:
+    0 0 0 1px rgba(255, 106, 0, 0.08),
+    0 25px 80px rgba(0, 0, 0, 0.55),
+    0 0 55px rgba(255, 106, 0, 0.1);
+
+  backdrop-filter: blur(10px);
+}
+
+/* CHAT HEADER */
+
+.chat-header {
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff6a00,
+      #ff8215
+    );
+}
+
+.chat-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ai-icon {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(255, 255, 255, 0.18);
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  border-radius: 50%;
+
+  font-size: 20px;
+}
+
+.chat-brand strong {
+  display: block;
+  font-size: 15px;
+}
+
+.chat-brand small {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 10px;
+
+  opacity: 0.85;
+}
+
+.chat-close {
+  border: none;
+  background: transparent;
+
+  color: white;
+
+  font-size: 23px;
+}
+
+/* QUICK ACTIONS */
+
+.quick-actions {
+  padding: 14px 16px;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.quick-actions button {
+  padding: 8px 12px;
+
+  background: transparent;
+
+  color: #dddddd;
+
+  border: 1px solid #444;
+
+  border-radius: 30px;
+
+  font-size: 10px;
+
+  transition: 0.25s ease;
+}
+
+.quick-actions button:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+/* CHAT MESSAGES */
+
+.chat-messages {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 22px 18px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.message-row {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+}
+
+.user-row {
+  justify-content: flex-end;
+}
+
+.message-avatar {
+  flex-shrink: 0;
+
+  width: 30px;
+  height: 30px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: var(--orange);
+  color: white;
+
+  font-size: 13px;
+}
+
+.message {
+  max-width: 78%;
+
+  padding: 12px 15px;
+
+  font-size: 12px;
+  line-height: 1.55;
+
+  border-radius: 13px;
+}
+
+.bot-message {
+  background: #202020;
+  color: #dddddd;
+
+  border-top-left-radius: 4px;
+}
+
+.user-message {
+  background: var(--orange);
+  color: white;
+
+  border-top-right-radius: 4px;
+}
+
+/* CHAT INPUT */
+
+.chat-input-area {
+  padding: 14px;
+
+  display: flex;
+
+  gap: 8px;
+
+  border-top: 1px solid var(--border);
+}
+
+.chat-input-area input {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 46px;
+
+  padding: 0 14px;
+
+  background: #0b0b0b;
+
+  border: 1px solid #383838;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  color: white;
+
+  font-size: 13px;
+}
+
+.chat-input-area input::placeholder {
+  color: #777;
+}
+
+.chat-input-area input:focus {
+  border-color: var(--orange);
+}
+
+.chat-input-area button {
+  width: 46px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: var(--orange);
+  color: white;
+
+  font-size: 17px;
+
+  transition: 0.2s ease;
+}
+
+.chat-input-area button:hover {
+  background: var(--orange-light);
+}
+
+/* ================= FLOATING CONCIERGE ================= */
+
+.floating-concierge {
+  position: fixed;
+
+  right: 28px;
+  bottom: 28px;
+
+  z-index: 2000;
+
+  padding: 15px 22px;
+
+  border: none;
+  border-radius: 50px;
+
+  background: var(--orange);
+  color: white;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 10px 35px rgba(255, 106, 0, 0.35);
+
+  transition: 0.25s ease;
+}
+
+.floating-concierge:hover {
+  transform: translateY(-3px);
+  background: var(--orange-light);
+}
+
+.floating-concierge span {
+  margin-right: 8px;
+}
+
+/* ================= HIGHLIGHTS ================= */
+
+.highlights {
+  min-height: 105px;
+
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+
+  background: var(--black-soft);
+
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.highlights > div {
+  padding: 22px 15px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  border-right: 1px solid var(--border);
+}
+
+.highlights span {
+  margin-bottom: 7px;
+
+  color: var(--orange);
+
+  font-size: 22px;
+}
+
+.highlights strong {
+  font-size: 12px;
+}
+
+.highlights small {
+  margin-top: 4px;
+
+  color: var(--gray);
+
+  font-size: 10px;
+}
+
+/* ================= COMMON SECTION ================= */
+
+.section {
+  width: min(1320px, calc(100% - 100px));
+
+  margin: auto;
+
+  padding: 110px 0;
+}
+
+.section-heading {
+  margin-bottom: 45px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.section-heading h2,
+.center-heading h2,
+.dining-content h2,
+.cta-section h2 {
+  margin: 12px 0;
+
+  font-family: "Playfair Display", serif;
+
+  font-size: clamp(38px, 4vw, 56px);
+
+  line-height: 1.1;
+
+  letter-spacing: -1px;
+}
+
+.section-heading p,
+.center-heading p {
+  color: var(--gray);
+}
+
+/* ================= ROOMS ================= */
+
+.rooms-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 24px;
+}
+
+.room-card {
+  overflow: hidden;
+
+  background: var(--black-card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  transition: 0.3s ease;
+}
+
+.room-card:hover {
+  transform: translateY(-6px);
+
+  border-color: rgba(255, 106, 0, 0.55);
+}
+
+.room-image {
+  height: 280px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.room-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: 0.5s ease;
+}
+
+.room-card:hover .room-image img {
+  transform: scale(1.05);
+}
+
+.room-tag {
+  position: absolute;
+
+  top: 15px;
+  left: 15px;
+
+  padding: 7px 10px;
+
+  background: rgba(0, 0, 0, 0.72);
+
+  color: var(--orange);
+
+  border-radius: 4px;
+
+  font-size: 8px;
+
+  letter-spacing: 2px;
+}
+
+.room-info {
+  padding: 22px;
+}
+
+.room-info h3 {
+  margin-bottom: 10px;
+
+  font-family: "Playfair Display", serif;
+
+  font-size: 25px;
+}
+
+.room-info p {
+  min-height: 42px;
+
+  color: var(--gray);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+.room-meta {
+  display: flex;
+
+  gap: 18px;
+
+  margin: 20px 0;
+
+  color: var(--gray);
+
+  font-size: 11px;
+}
+
+.room-bottom {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+}
+
+.room-bottom strong {
+  font-size: 20px;
+}
+
+.room-bottom small {
+  color: var(--gray);
+}
+
+.room-bottom button {
+  padding: 10px 13px;
+
+  background: var(--orange);
+
+  border: none;
+  border-radius: 7px;
+
+  color: white;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ================= EXPERIENCES ================= */
+
+.experiences-section {
+  padding-top: 40px;
+}
+
+.center-heading {
+  margin-bottom: 45px;
+
+  text-align: center;
+}
+
+.experience-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 18px;
+}
+
+.experience-card {
+  height: 390px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+}
+
+.experience-card img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: 0.5s ease;
+}
+
+.experience-card:hover img {
+  transform: scale(1.06);
+}
+
+.experience-card::after {
+  content: "";
+
+  position: absolute;
+  inset: 35% 0 0;
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0, 0, 0, 0.9)
+    );
+}
+
+.experience-overlay {
+  position: absolute;
+
+  z-index: 2;
+
+  left: 25px;
+  right: 20px;
+  bottom: 24px;
+}
+
+.experience-overlay h3 {
+  margin-bottom: 7px;
+
+  font-family: "Playfair Display", serif;
+
+  font-size: 27px;
+}
+
+.experience-overlay span {
+  color: #dddddd;
+
+  font-size: 12px;
+}
+
+/* ================= DINING ================= */
+
+.dining-section {
+  width: min(1320px, calc(100% - 100px));
+
+  margin: auto;
+
+  padding: 60px 0 110px;
+
+  display: grid;
+
+  grid-template-columns: 1.1fr 0.9fr;
+
+  gap: 75px;
+
+  align-items: center;
+}
+
+.dining-image {
+  height: 540px;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+}
+
+.dining-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: 0.5s ease;
+}
+
+.dining-image:hover img {
+  transform: scale(1.03);
+}
+
+.dining-content p {
+  max-width: 530px;
+
+  color: var(--gray);
+
+  line-height: 1.8;
+}
+
+.dining-times {
+  margin: 35px 0;
+
+  display: grid;
+
+  gap: 20px;
+}
+
+.dining-times div {
+  display: grid;
+
+  grid-template-columns: 30px 1fr;
+}
+
+.dining-times span {
+  grid-row: span 2;
+
+  color: var(--orange);
+}
+
+.dining-times small {
+  color: var(--gray);
+
+  font-size: 11px;
+}
+
+.dining-times strong {
+  font-size: 14px;
+}
+
+/* ================= GALLERY ================= */
+
+.gallery-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 16px;
+}
+
+.gallery-item {
+  height: 280px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+}
+
+.gallery-item:nth-child(2),
+.gallery-item:nth-child(5) {
+  height: 340px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: 0.5s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.06);
+}
+
+/* ================= CTA ================= */
+
+.cta-section {
+  margin: 40px auto 0;
+
+  padding: 120px 30px;
+
+  text-align: center;
+
+  background-image:
+    linear-gradient(
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.72)
+    ),
+    url("https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1800&q=90");
+
+  background-size: cover;
+
+  background-position: center;
+}
+
+.cta-section h2 {
+  font-size: clamp(45px, 5vw, 68px);
+}
+
+.cta-section p {
+  margin-bottom: 30px;
+
+  color: #cccccc;
+}
+
+/* ================= FOOTER ================= */
+
+footer {
+  padding: 75px 50px 25px;
+
+  background: #050505;
+
+  color: white;
+}
+
+.footer-main {
+  max-width: 1240px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: 2fr 1fr 1fr 1.4fr;
+
+  gap: 60px;
+
+  padding-bottom: 60px;
+}
+
+.footer-brand h3 {
+  margin: 0;
+
+  font-family: "Playfair Display", serif;
+
+  font-size: 28px;
+}
+
+.footer-brand > span {
+  color: var(--orange);
+
+  letter-spacing: 4px;
+
+  font-size: 8px;
+}
+
+.footer-brand p {
+  max-width: 270px;
+
+  margin-top: 20px;
+
+  color: #888;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+.footer-main h4 {
+  margin-top: 0;
+
+  color: var(--orange);
+}
+
+.footer-main a,
+.footer-main > div > span {
+  display: block;
+
+  margin: 13px 0;
+
+  color: #888;
+
+  font-size: 13px;
+
+  transition: 0.2s ease;
+}
+
+.footer-main a:hover {
+  color: var(--orange);
+}
+
+.footer-bottom {
+  max-width: 1240px;
+
+  margin: auto;
+
+  padding-top: 22px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  border-top: 1px solid #222;
+
+  color: #555;
+
+  font-size: 11px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1100px) {
+  .navbar {
+    padding: 0 28px;
+  }
+
+  .navbar nav {
+    gap: 20px;
+  }
+
+  .hero-content {
+    width: min(100% - 60px, 1200px);
+
+    grid-template-columns: minmax(0, 1fr) 430px;
+
+    gap: 35px;
+  }
+
+  .hero h1 {
+    font-size: 62px;
+  }
+
+  .section,
+  .dining-section {
+    width: min(100% - 60px, 1200px);
+  }
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width: 850px) {
+  .navbar nav {
+    display: none;
+  }
+
+  .logo {
+    min-width: auto;
+  }
+
+  .nav-actions {
+    min-width: auto;
+  }
+
+  .hero {
+    padding: 80px 0;
+
+    /*
+      On tablet/mobile the image stays visible
+      but text gets stronger background.
+    */
+
+    background-image:
+      linear-gradient(
+        rgba(0, 0, 0, 0.65),
+        rgba(0, 0, 0, 0.72)
+      ),
+      url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2200&q=95");
+  }
+
+  .hero-content {
+    width: calc(100% - 40px);
+
+    grid-template-columns: 1fr;
+
+    gap: 45px;
+  }
+
+  .hero-copy {
+    padding: 30px 0 0;
+  }
+
+  .hero-chat {
+    height: 560px;
+  }
+
+  .highlights {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dining-section {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 550px) {
+  .navbar {
+    height: 65px;
+
+    padding: 0 18px;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-name {
+    font-size: 16px;
+  }
+
+  .logo-sub {
+    font-size: 7px;
+  }
+
+  .book-btn {
+    padding: 10px 13px;
+
+    font-size: 11px;
+  }
+
+  .theme-btn {
+    width: 34px;
+    height: 34px;
+
+    font-size: 15px;
+  }
+
+  .hero {
+    min-height: auto;
+
+    padding: 65px 0;
+  }
+
+  .hero-content {
+    width: calc(100% - 30px);
+  }
+
+  .hero-copy {
+    padding: 10px 0;
+  }
+
+  .hero h1 {
+    font-size: 49px;
+
+    letter-spacing: -1px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  .hero-features {
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+
+    text-align: center;
+  }
+
+  .hero-chat {
+    height: 540px;
+
+    border-radius: 14px;
+  }
+
+  .highlights {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section,
+  .dining-section {
+    width: calc(100% - 30px);
+
+    padding: 75px 0;
+  }
+
+  .section-heading {
+    display: block;
+  }
+
+  .text-btn {
+    margin-top: 20px;
+  }
+
+  .rooms-grid {
+    gap: 18px;
+  }
+
+  .room-image {
+    height: 250px;
+  }
+
+  .experience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-item,
+  .gallery-item:nth-child(2),
+  .gallery-item:nth-child(5) {
+    height: 250px;
+  }
+
+  .dining-image {
+    height: 350px;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr;
+
+    gap: 35px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 10px;
+  }
+
+  .floating-concierge {
+    right: 15px;
+    bottom: 15px;
+
+    padding: 13px 18px;
+
+    font-size: 12px;
+  }
+}
