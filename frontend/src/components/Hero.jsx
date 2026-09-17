@@ -1,12 +1,18 @@
-const Hero = () => {
+const Hero = ({ onAskConcierge }) => {
   const scrollToRooms = () => {
     document.getElementById("rooms")?.scrollIntoView({
       behavior: "smooth",
+      block: "start",
     });
   };
 
   const openConcierge = () => {
-    document.querySelector(".chat-button")?.click();
+    if (onAskConcierge) {
+      onAskConcierge();
+    } else {
+      const btn = document.querySelector(".floating-concierge") || document.querySelector(".chat-button");
+      if (btn) btn.click();
+    }
   };
 
   return (

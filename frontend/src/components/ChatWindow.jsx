@@ -1,9 +1,88 @@
+import { useState, useRef, useEffect } from "react";
 import { X, Send, Bot } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { sendChatMessage } from "../services/api";
 
 function ChatWindow({ onClose }) {
+  const [messages, setMessages] = useState([
+    {
+      type: "bot",
+      text: "Hello! 👋 How can I help you with your stay?",
+    },
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
+  const quickQuestions = [
+    "Check-in & Check-out",
+    "Rooms",
+    "Breakfast",
+    "Amenities",
+    "Policies",
+  ];
+
+  const handleSend = async (text = input) => {
+    if (loading) return;
+    const userText = (typeof text === "string" ? text : input).trim();
+    if (!userText) return;
+
+    // Keep the user's message visible immediately
+    const updatedMessages = [
+      ...messages,
+      {
+        type: "user",
+        text: userText,
+      },
+    ];
+    setMessages(updatedMessages);
+    setInput("");
+
+    try {
+      setLoading(true);
+      const conversationHistory = updatedMessages
+        .filter((msg) => msg.type === "user" || msg.type === "bot")
+        .map((msg) => ({
+          role: msg.type === "user" ? "user" : "assistant",
+          content: msg.text,
+        }));
+
+      const data = await sendChatMessage({
+        message: userText,
+        conversation: conversationHistory.slice(0, -1),
+      });
+
+      if (data && data.answer) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            text: data.answer,
+          },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            text: "I'd be happy to help. You can ask me about rooms, check-in, breakfast, amenities, policies, or availability.",
+          },
+        ]);
+      }
+    } catch (err) {
+      console.error("Failed to get chat response:", err);
+      toast.error("Unable to get a response right now. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="chat-window">
-
       <div className="chat-header">
         <div className="chat-title">
           <div className="chat-avatar">
@@ -16,57 +95,84 @@ function ChatWindow({ onClose }) {
           </div>
         </div>
 
-        <button onClick={onClose}>
+        <button onClick={onClose} type="button">
           <X size={19} />
         </button>
       </div>
 
       <div className="quick-actions">
-        <button>Check-in & Check-out</button>
-        <button>Rooms</button>
-        <button>Breakfast</button>
-        <button>Amenities</button>
-        <button>Policies</button>
+        {quickQuestions.map((question) => (
+          <button
+            key={question}
+            disabled={loading}
+            onClick={() => handleSend(question)}
+            type="button"
+            style={{
+              opacity: loading ? 0.6 : 1,
+              cursor: loading ? "not-allowed" : "pointer",
+            }}
+          >
+            {question}
+          </button>
+        ))}
       </div>
 
       <div className="chat-messages">
+        {messages.map((item, index) => (
+          <div
+            key={index}
+            className={`message ${
+              item.type === "user" ? "user-message" : "ai-message"
+            }`}
+          >
+            {item.type === "bot" && (
+              <div className="message-icon">
+                <Bot size={16} />
+              </div>
+            )}
 
-        <div className="message ai-message">
-          <div className="message-icon">
-            <Bot size={16} />
+            <div className="message-bubble">{item.text}</div>
           </div>
+        ))}
 
-          <div className="message-bubble">
-            Hello! 👋 How can I help you with your stay?
+        {loading && (
+          <div className="message ai-message">
+            <div className="message-icon">
+              <Bot size={16} />
+            </div>
+            <div
+              className="message-bubble"
+              style={{ fontStyle: "italic", opacity: 0.85 }}
+            >
+              Thinking...
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="message user-message">
-          <div className="message-bubble">
-            What time is check-in?
-          </div>
-        </div>
-
-        <div className="message ai-message">
-          <div className="message-icon">
-            <Bot size={16} />
-          </div>
-
-          <div className="message-bubble">
-            Check-in starts at <strong>2:00 PM</strong> and
-            check-out is at <strong>11:00 AM</strong>.
-          </div>
-        </div>
-
+        <div ref={messagesEndRef} />
       </div>
 
       <div className="chat-input">
         <input
           type="text"
-          placeholder="Ask anything about your stay..."
+          value={input}
+          disabled={loading}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !loading) handleSend();
+          }}
+          placeholder={loading ? "Thinking..." : "Ask anything about your stay..."}
         />
 
-        <button>
+        <button
+          disabled={loading || !input.trim()}
+          onClick={() => handleSend()}
+          type="button"
+          style={{
+            opacity: loading || !input.trim() ? 0.6 : 1,
+            cursor: loading || !input.trim() ? "not-allowed" : "pointer",
+          }}
+        >
           <Send size={17} />
         </button>
       </div>

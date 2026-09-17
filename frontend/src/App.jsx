@@ -1,61 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { Toaster, toast } from "react-hot-toast";
 import "./App.css";
-
-const rooms = [
-  {
-    name: "Standard Room",
-    price: "₹6,500",
-    guests: "2 Guests",
-    bed: "King Bed",
-    image:
-      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=900&q=85",
-    description:
-      "Cozy and elegant room with modern amenities for a comfortable stay.",
-  },
-  {
-    name: "Deluxe Room",
-    price: "₹8,500",
-    guests: "3 Guests",
-    bed: "King Bed",
-    image:
-      "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=85",
-    description:
-      "Spacious room with premium interiors and beautiful pool views.",
-  },
-  {
-    name: "Family Suite",
-    price: "₹12,000",
-    guests: "4 Guests",
-    bed: "2 Queen Beds",
-    image:
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=85",
-    description:
-      "A spacious suite designed for families with extra comfort.",
-  },
-];
-
-const experiences = [
-  {
-    title: "Infinity Pool",
-    image:
-      "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1000&q=85",
-  },
-  {
-    title: "Fine Dining",
-    image:
-      "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1000&q=85",
-  },
-  {
-    title: "Spa & Wellness",
-    image:
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=85",
-  },
-  {
-    title: "Beach Experience",
-    image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=85",
-  },
-];
+import RoomsSection from "./components/RoomsSection";
+import Experiences from "./components/Experiences";
+import DiningModal from "./components/DiningModal";
+import { sendChatMessage } from "./services/api";
 
 const gallery = [
   "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=85",
@@ -69,7 +18,49 @@ const gallery = [
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [chatOpen, setChatOpen] = useState(true);
+  const [activeNav, setActiveNav] = useState("home");
   const [message, setMessage] = useState("");
+  const [isDiningModalOpen, setIsDiningModalOpen] = useState(false);
+  const [chatLoading, setChatLoading] = useState(false);
+  const chatMessagesRef = useRef(null);
+
+  const handleOpenConcierge = () => {
+    setChatOpen(true);
+    setTimeout(() => {
+      document.querySelector(".hero-chat")?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 50);
+  };
+
+  const scrollToSection = (id) => (e) => {
+    if (e) e.preventDefault();
+    setActiveNav(id);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  useEffect(() => {
+    const sectionIds = ["home", "rooms", "experiences", "dining", "gallery", "contact"];
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el) {
+          const top = el.offsetTop - 150;
+          if (scrollY >= top) {
+            setActiveNav(sectionIds[i]);
+            break;
+          }
+        }
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const [messages, setMessages] = useState([
     {
@@ -85,55 +76,70 @@ function App() {
     "What amenities do you have?",
   ];
 
-  const sendMessage = (text = message) => {
-    if (!text.trim()) return;
+  useEffect(() => {
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
+  }, [messages, chatLoading]);
 
-    setMessages((prev) => [
-      ...prev,
+  const sendMessage = async (text = message) => {
+    if (chatLoading) return;
+    const userText = (typeof text === "string" ? text : message).trim();
+    if (!userText) return;
+
+    const currentMessages = [
+      ...messages,
       {
         type: "user",
-        text: text,
+        text: userText,
       },
-    ]);
+    ];
 
+    setMessages(currentMessages);
     setMessage("");
 
-    setTimeout(() => {
-      let reply =
-        "I'd be happy to help. You can ask me about rooms, check-in, breakfast, amenities, policies, or availability.";
+    try {
+      setChatLoading(true);
+      const conversationHistory = currentMessages
+        .filter((msg) => msg.type === "user" || msg.type === "bot")
+        .map((msg) => ({
+          role: msg.type === "user" ? "user" : "assistant",
+          content: msg.text,
+        }));
 
-      const lower = text.toLowerCase();
+      const data = await sendChatMessage({
+        message: userText,
+        conversation: conversationHistory.slice(0, -1),
+      });
 
-      if (lower.includes("check")) {
-        reply =
-          "Check-in starts at 2:00 PM and check-out is at 11:00 AM.";
-      } else if (lower.includes("breakfast")) {
-        reply =
-          "Yes! Breakfast is included for hotel guests. It is served from 6:30 AM to 10:30 AM.";
-      } else if (lower.includes("room")) {
-        reply =
-          "We have Standard, Deluxe and Family Suite rooms. I can also help you find a room based on your number of guests.";
-      } else if (
-        lower.includes("amenit") ||
-        lower.includes("pool") ||
-        lower.includes("gym")
-      ) {
-        reply =
-          "Our amenities include a swimming pool, fitness center, spa & wellness, restaurant, free Wi-Fi and secure parking.";
+      if (data && data.answer) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            text: data.answer,
+          },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            text: "I'd be happy to help. You can ask me about rooms, check-in, breakfast, amenities, policies, or availability.",
+          },
+        ]);
       }
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          type: "bot",
-          text: reply,
-        },
-      ]);
-    }, 700);
+    } catch (err) {
+      console.error("Failed to get chat response:", err);
+      toast.error("Unable to get a response right now. Please try again.");
+    } finally {
+      setChatLoading(false);
+    }
   };
 
   return (
     <div className={darkMode ? "app dark" : "app light"}>
+      <Toaster position="top-right" />
       {/* ================= NAVBAR ================= */}
       <header className="navbar">
         <div className="logo">
@@ -145,14 +151,48 @@ function App() {
         </div>
 
         <nav>
-          <a className="active" href="#home">
+          <a
+            className={activeNav === "home" ? "active" : ""}
+            href="#home"
+            onClick={scrollToSection("home")}
+          >
             Home
           </a>
-          <a href="#rooms">Rooms</a>
-          <a href="#experiences">Experiences</a>
-          <a href="#dining">Dining</a>
-          <a href="#gallery">Gallery</a>
-          <a href="#contact">Contact</a>
+          <a
+            className={activeNav === "rooms" ? "active" : ""}
+            href="#rooms"
+            onClick={scrollToSection("rooms")}
+          >
+            Rooms
+          </a>
+          <a
+            className={activeNav === "experiences" ? "active" : ""}
+            href="#experiences"
+            onClick={scrollToSection("experiences")}
+          >
+            Experiences
+          </a>
+          <a
+            className={activeNav === "dining" ? "active" : ""}
+            href="#dining"
+            onClick={scrollToSection("dining")}
+          >
+            Dining
+          </a>
+          <a
+            className={activeNav === "gallery" ? "active" : ""}
+            href="#gallery"
+            onClick={scrollToSection("gallery")}
+          >
+            Gallery
+          </a>
+          <a
+            className={activeNav === "contact" ? "active" : ""}
+            href="#contact"
+            onClick={scrollToSection("contact")}
+          >
+            Contact
+          </a>
         </nav>
 
         <div className="nav-actions">
@@ -163,7 +203,22 @@ function App() {
             {darkMode ? "☀" : "☾"}
           </button>
 
-          <button className="book-btn">Book Now</button>
+          <button
+            className="book-btn"
+            onClick={() => {
+              const roomsSection = document.getElementById("rooms");
+              if (roomsSection) {
+                roomsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+              window.dispatchEvent(
+                new CustomEvent("prashiv-open-booking", {
+                  detail: { roomId: "deluxe" },
+                })
+              );
+            }}
+          >
+            Book Now
+          </button>
         </div>
       </header>
 
@@ -190,11 +245,21 @@ function App() {
               </p>
 
               <div className="hero-buttons">
-                <button className="primary-btn">Explore Rooms →</button>
+                <button
+                  className="primary-btn"
+                  onClick={() => {
+                    document.getElementById("rooms")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }}
+                >
+                  Explore Rooms →
+                </button>
 
                 <button
                   className="secondary-btn"
-                  onClick={() => setChatOpen(true)}
+                  onClick={handleOpenConcierge}
                 >
                   ✦ Ask Concierge
                 </button>
@@ -208,7 +273,10 @@ function App() {
             </div>
 
             {/* ================= AI CHAT ================= */}
-            <div className={`hero-chat ${chatOpen ? "chat-visible" : ""}`}>
+            <div
+              className={`hero-chat ${chatOpen ? "chat-visible" : ""}`}
+              style={{ display: chatOpen ? "flex" : "none" }}
+            >
               <div className="chat-header">
                 <div className="chat-brand">
                   <div className="ai-icon">✦</div>
@@ -231,14 +299,19 @@ function App() {
                 {quickQuestions.map((question) => (
                   <button
                     key={question}
+                    disabled={chatLoading}
                     onClick={() => sendMessage(question)}
+                    style={{
+                      cursor: chatLoading ? "not-allowed" : "pointer",
+                      opacity: chatLoading ? 0.6 : 1,
+                    }}
                   >
                     {question}
                   </button>
                 ))}
               </div>
 
-              <div className="chat-messages">
+              <div className="chat-messages" ref={chatMessagesRef}>
                 {messages.map((item, index) => (
                   <div
                     className={`message-row ${
@@ -259,26 +332,51 @@ function App() {
                     </div>
                   </div>
                 ))}
+
+                {chatLoading && (
+                  <div className="message-row">
+                    <div className="message-avatar">✦</div>
+                    <div
+                      className="message bot-message"
+                      style={{
+                        fontStyle: "italic",
+                        opacity: 0.85,
+                      }}
+                    >
+                      Thinking...
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="chat-input-area">
                 <input
                   value={message}
+                  disabled={chatLoading}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") sendMessage();
+                    if (e.key === "Enter" && !chatLoading) sendMessage();
                   }}
-                  placeholder="Ask anything about your stay..."
+                  placeholder={chatLoading ? "Thinking..." : "Ask anything about your stay..."}
                 />
 
-                <button onClick={() => sendMessage()}>➤</button>
+                <button
+                  disabled={chatLoading}
+                  onClick={() => sendMessage()}
+                  style={{
+                    opacity: chatLoading ? 0.6 : 1,
+                    cursor: chatLoading ? "not-allowed" : "pointer",
+                  }}
+                >
+                  ➤
+                </button>
               </div>
             </div>
 
             {!chatOpen && (
               <button
                 className="floating-concierge"
-                onClick={() => setChatOpen(true)}
+                onClick={handleOpenConcierge}
               >
                 <span>✦</span>
                 Hotel Concierge
@@ -288,7 +386,7 @@ function App() {
         </section>
 
         {/* ================= HIGHLIGHTS ================= */}
-        <section className="highlights">
+        <section className="highlights" id="amenities">
           <div>
             <span>♧</span>
             <strong>Luxury Rooms</strong>
@@ -327,71 +425,10 @@ function App() {
         </section>
 
         {/* ================= ROOMS ================= */}
-        <section className="section" id="rooms">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">STAY IN COMFORT</span>
-              <h2>Rooms & Suites</h2>
-              <p>Comfortable stays designed for every kind of traveler.</p>
-            </div>
-
-            <button className="text-btn">View All Rooms →</button>
-          </div>
-
-          <div className="rooms-grid">
-            {rooms.map((room) => (
-              <div className="room-card" key={room.name}>
-                <div className="room-image">
-                  <img src={room.image} alt={room.name} />
-                  <span className="room-tag">PRASHIV</span>
-                </div>
-
-                <div className="room-info">
-                  <h3>{room.name}</h3>
-
-                  <p>{room.description}</p>
-
-                  <div className="room-meta">
-                    <span>♙ {room.guests}</span>
-                    <span>▣ {room.bed}</span>
-                  </div>
-
-                  <div className="room-bottom">
-                    <div>
-                      <strong>{room.price}</strong>
-                      <small>/ night</small>
-                    </div>
-
-                    <button>View Details →</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        <RoomsSection />
 
         {/* ================= EXPERIENCES ================= */}
-        <section className="section experiences-section" id="experiences">
-          <div className="center-heading">
-            <span className="eyebrow">EXPERIENCES TO INSPIRE</span>
-            <h2>Make Your Stay Memorable</h2>
-            <p>
-              Discover experiences designed to make every moment special.
-            </p>
-          </div>
-
-          <div className="experience-grid">
-            {experiences.map((experience) => (
-              <div className="experience-card" key={experience.title}>
-                <img src={experience.image} alt={experience.title} />
-                <div className="experience-overlay">
-                  <h3>{experience.title}</h3>
-                  <span>Explore Experience →</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        <Experiences />
 
         {/* ================= DINING ================= */}
         <section className="dining-section" id="dining">
@@ -432,7 +469,12 @@ function App() {
               </div>
             </div>
 
-            <button className="primary-btn">Explore Dining →</button>
+            <button
+              className="primary-btn"
+              onClick={() => setIsDiningModalOpen(true)}
+            >
+              Explore Dining →
+            </button>
           </div>
         </section>
 
@@ -461,7 +503,17 @@ function App() {
 
           <p>Find the perfect room for your next getaway.</p>
 
-          <button className="primary-btn">Check Availability →</button>
+          <button
+            className="primary-btn"
+            onClick={() => {
+              document.getElementById("rooms")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }}
+          >
+            Check Availability →
+          </button>
         </section>
       </main>
 
@@ -480,26 +532,35 @@ function App() {
 
           <div>
             <h4>Explore</h4>
-            <a href="#rooms">Rooms</a>
-            <a href="#experiences">Experiences</a>
-            <a href="#dining">Dining</a>
-            <a href="#gallery">Gallery</a>
+            <a href="#rooms" onClick={scrollToSection("rooms")}>Rooms</a>
+            <a href="#experiences" onClick={scrollToSection("experiences")}>Experiences</a>
+            <a href="#dining" onClick={scrollToSection("dining")}>Dining</a>
+            <a href="#gallery" onClick={scrollToSection("gallery")}>Gallery</a>
           </div>
 
           <div>
             <h4>Hotel</h4>
-            <a href="#home">About Us</a>
-            <a href="#home">Amenities</a>
-            <a href="#home">Policies</a>
-            <a href="#contact">Contact</a>
+            <a href="#home" onClick={scrollToSection("home")}>About Us</a>
+            <a href="#amenities" onClick={scrollToSection("amenities")}>Amenities</a>
+            <a
+              href="#home"
+              onClick={(e) => {
+                e.preventDefault();
+                handleOpenConcierge();
+                sendMessage("What are the hotel check-in, check-out, and cancellation policies?");
+              }}
+            >
+              Policies
+            </a>
+            <a href="#contact" onClick={scrollToSection("contact")}>Contact</a>
           </div>
 
           <div>
             <h4>Contact</h4>
             <span>PRASHIV</span>
             <span>Key West, Florida</span>
-            <span>+1 234 567 890</span>
-            <span>hello@prashiv.com</span>
+            <a href="tel:+1234567890" style={{ color: "inherit", textDecoration: "none" }}>+1 234 567 890</a>
+            <a href="mailto:hello@prashiv.com" style={{ color: "inherit", textDecoration: "none" }}>hello@prashiv.com</a>
           </div>
         </div>
 
@@ -508,6 +569,16 @@ function App() {
           <span>Privacy Policy · Terms</span>
         </div>
       </footer>
+
+      {/* ================= DINING MODAL ================= */}
+      <DiningModal
+        isOpen={isDiningModalOpen}
+        onClose={() => setIsDiningModalOpen(false)}
+        onAskConcierge={(query) => {
+          handleOpenConcierge();
+          sendMessage(query);
+        }}
+      />
     </div>
   );
 }

@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { Coffee, Utensils, Wine } from "lucide-react";
+import DiningModal from "./DiningModal";
 
 function Dining() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section className="dining-section" id="dining">
       <div className="dining-image">
@@ -40,10 +44,18 @@ function Dining() {
           </span>
         </div>
 
-        <button className="primary-btn">
+        <button
+          className="primary-btn"
+          onClick={() => setIsModalOpen(true)}
+        >
           Explore Dining →
         </button>
       </div>
+
+      <DiningModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 }
