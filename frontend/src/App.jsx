@@ -25,6 +25,7 @@ function App() {
   const [isDiningModalOpen, setIsDiningModalOpen] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
   const chatMessagesRef = useRef(null);
+  const isSendingRef = useRef(false);
 
   const handleOpenConcierge = () => {
     setChatOpen(true);
@@ -76,7 +77,7 @@ function App() {
   const [messages, setMessages] = useState([
     {
       type: "bot",
-      text: "Hello! 👋 I'm your Hotel Concierge. How can I help with your stay?",
+      text: "Hello! ✦ I'm your Hotel Concierge. How can I help with your stay?",
     },
   ]);
 
@@ -94,9 +95,13 @@ function App() {
   }, [messages, chatLoading]);
 
   const sendMessage = async (text = message) => {
-    if (chatLoading) return;
+    if (isSendingRef.current || chatLoading) return;
     const userText = (typeof text === "string" ? text : message).trim();
     if (!userText) return;
+
+    // Immediately lock synchronously to avoid any rapid duplicate requests
+    isSendingRef.current = true;
+    setChatLoading(true);
 
     const currentMessages = [
       ...messages,
@@ -110,7 +115,6 @@ function App() {
     setMessage("");
 
     try {
-      setChatLoading(true);
       const conversationHistory = currentMessages
         .filter((msg) => msg.type === "user" || msg.type === "bot")
         .map((msg) => ({
@@ -120,7 +124,7 @@ function App() {
 
       const data = await sendChatMessage({
         message: userText,
-        conversation: conversationHistory.slice(0, -1),
+        conversation: conversationHistory.slice(-7, -1),
       });
 
       if (data && data.answer) {
@@ -142,8 +146,16 @@ function App() {
       }
     } catch (err) {
       console.error("Failed to get chat response:", err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "bot",
+          text: "I'm having trouble connecting right now. Please try again in a moment, or ask me about rooms, check-in, breakfast, amenities, policies, or availability.",
+        },
+      ]);
       toast.error("Unable to get a response right now. Please try again.");
     } finally {
+      isSendingRef.current = false;
       setChatLoading(false);
     }
   };
@@ -391,7 +403,9 @@ function App() {
                   <button
                     key={question}
                     disabled={chatLoading}
-                    onClick={() => sendMessage(question)}
+                    onClick={() => {
+                      if (!chatLoading && !isSendingRef.current) sendMessage(question);
+                    }}
                     style={{
                       cursor: chatLoading ? "not-allowed" : "pointer",
                       opacity: chatLoading ? 0.6 : 1,
@@ -446,17 +460,28 @@ function App() {
                   disabled={chatLoading}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !chatLoading) sendMessage();
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      if (!chatLoading && !isSendingRef.current && message.trim()) {
+                        sendMessage();
+                      }
+                    }
                   }}
                   placeholder={chatLoading ? "Thinking..." : "Ask anything about your stay..."}
                 />
 
                 <button
-                  disabled={chatLoading}
-                  onClick={() => sendMessage()}
+                  type="button"
+                  disabled={chatLoading || !message.trim()}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (!chatLoading && !isSendingRef.current && message.trim()) {
+                      sendMessage();
+                    }
+                  }}
                   style={{
-                    opacity: chatLoading ? 0.6 : 1,
-                    cursor: chatLoading ? "not-allowed" : "pointer",
+                    opacity: chatLoading || !message.trim() ? 0.6 : 1,
+                    cursor: chatLoading || !message.trim() ? "not-allowed" : "pointer",
                   }}
                 >
                   ➤

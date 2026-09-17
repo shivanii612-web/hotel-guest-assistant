@@ -5,17 +5,21 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
+// Candidate models prioritized by speed, availability, and reliability.
+// gemini-2.5-flash responds within ~2-3 seconds with high fidelity.
+// gemini-3.1-flash-lite serves as an immediate, fast secondary fallback.
 const candidateModels = [
+  process.env.GEMINI_MODEL,
+  "gemini-2.5-flash",
+  "gemini-3.1-flash-lite",
   "gemini-3.8-flash",
   "gemini-3.6-flash",
-  "gemini-3.1-flash-lite",
-  "gemini-2.5-flash",
-];
+].filter(Boolean);
 
-async function generateAIResponse(message, conversation = []) {
-  const hotelContext = JSON.stringify(hotelData, null, 2);
+// Pre-serialize static hotel context once at module level to avoid repeated serialization overhead.
+const hotelContext = JSON.stringify(hotelData);
 
-  const systemInstruction = `
+const systemInstruction = `
 You are the AI guest assistant for PRASHIV Hotel & Resort.
 Answer the guest's current question directly using ONLY the provided hotel data.
 Do not return a generic help message when the answer can be found in the hotel data.
@@ -35,35 +39,55 @@ PRASHIV HOTEL DATA:
 ${hotelContext}
 `;
 
-  const conversationText = conversation
-    .map((item) => `${item.role}: ${item.content}`)
-    .join("\n");
+// Helper to prevent a stalled or overloaded candidate model from blocking execution indefinitely
+function generateWithTimeout(model, prompt, timeoutMs = 8000) {
+  return Promise.race([
+    ai.models.generateContent({
+      model,
+      contents: prompt,
+      config: {
+        systemInstruction,
+      },
+    }),
+    new Promise((_, reject) => {
+      const timer = setTimeout(() => {
+        reject(new Error(`Model ${model} request timed out after ${timeoutMs}ms`));
+      }, timeoutMs);
+      if (timer.unref) timer.unref();
+    }),
+  ]);
+}
 
-  const prompt = `
-Previous conversation:
-${conversationText}
+// Maximum conversation turns to send to avoid excessive token transmission and latency
+const MAX_CONVERSATION_TURNS = 6;
 
-Current guest message:
-${message}
-`;
+async function generateAIResponse(message, conversation = []) {
+  // Retain only the most recent conversation context to avoid sending excessive history tokens
+  const recentConversation = Array.isArray(conversation)
+    ? conversation.slice(-MAX_CONVERSATION_TURNS)
+    : [];
+
+  const conversationText = recentConversation.length > 0
+    ? recentConversation
+        .map((item) => `${item.role}: ${item.content}`)
+        .join("\n")
+    : "";
+
+  const prompt = conversationText
+    ? `Previous conversation:\n${conversationText}\n\nCurrent guest message:\n${message}`
+    : `Current guest message:\n${message}`;
 
   let lastError;
   for (const model of candidateModels) {
     try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: prompt,
-        config: {
-          systemInstruction,
-        },
-      });
+      const response = await generateWithTimeout(model, prompt, 8000);
 
       if (response && response.text) {
         return response.text.trim();
       }
     } catch (err) {
       lastError = err;
-      console.warn(`Model ${model} failed, trying fallback:`, err.message || err.status);
+      console.warn(`Model ${model} failed or timed out, trying fallback:`, err.message || err.status);
     }
   }
 

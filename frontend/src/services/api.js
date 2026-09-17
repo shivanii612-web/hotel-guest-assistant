@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://prashiv-hotel-backend.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_URL || "https://prashiv-hotel-backend.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 25000,
 });
 
 export const checkAvailability = async (data) => {

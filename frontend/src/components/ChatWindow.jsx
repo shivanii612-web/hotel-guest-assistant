@@ -13,6 +13,7 @@ function ChatWindow({ onClose }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const isSendingRef = useRef(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -27,9 +28,13 @@ function ChatWindow({ onClose }) {
   ];
 
   const handleSend = async (text = input) => {
-    if (loading) return;
+    if (isSendingRef.current || loading) return;
     const userText = (typeof text === "string" ? text : input).trim();
     if (!userText) return;
+
+    // Immediately lock synchronously to avoid any rapid duplicate requests
+    isSendingRef.current = true;
+    setLoading(true);
 
     // Keep the user's message visible immediately
     const updatedMessages = [
@@ -43,7 +48,6 @@ function ChatWindow({ onClose }) {
     setInput("");
 
     try {
-      setLoading(true);
       const conversationHistory = updatedMessages
         .filter((msg) => msg.type === "user" || msg.type === "bot")
         .map((msg) => ({
@@ -53,7 +57,7 @@ function ChatWindow({ onClose }) {
 
       const data = await sendChatMessage({
         message: userText,
-        conversation: conversationHistory.slice(0, -1),
+        conversation: conversationHistory.slice(-7, -1),
       });
 
       if (data && data.answer) {
@@ -75,8 +79,16 @@ function ChatWindow({ onClose }) {
       }
     } catch (err) {
       console.error("Failed to get chat response:", err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "bot",
+          text: "I'm having trouble connecting right now. Please try again in a moment, or ask me about rooms, check-in, breakfast, amenities, policies, or availability.",
+        },
+      ]);
       toast.error("Unable to get a response right now. Please try again.");
     } finally {
+      isSendingRef.current = false;
       setLoading(false);
     }
   };
@@ -105,7 +117,9 @@ function ChatWindow({ onClose }) {
           <button
             key={question}
             disabled={loading}
-            onClick={() => handleSend(question)}
+            onClick={() => {
+              if (!loading && !isSendingRef.current) handleSend(question);
+            }}
             type="button"
             style={{
               opacity: loading ? 0.6 : 1,
@@ -159,14 +173,24 @@ function ChatWindow({ onClose }) {
           disabled={loading}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && !loading) handleSend();
+            if (e.key === "Enter") {
+              e.preventDefault();
+              if (!loading && !isSendingRef.current && input.trim()) {
+                handleSend();
+              }
+            }
           }}
           placeholder={loading ? "Thinking..." : "Ask anything about your stay..."}
         />
 
         <button
           disabled={loading || !input.trim()}
-          onClick={() => handleSend()}
+          onClick={(e) => {
+            e.preventDefault();
+            if (!loading && !isSendingRef.current && input.trim()) {
+              handleSend();
+            }
+          }}
           type="button"
           style={{
             opacity: loading || !input.trim() ? 0.6 : 1,
