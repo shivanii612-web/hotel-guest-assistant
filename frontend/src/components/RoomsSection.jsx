@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { checkAvailability } from "../services/api";
 import BookingModal from "./BookingModal";
+import RoomDetailsModal from "./RoomDetailsModal";
 
 const rooms = [
   {
@@ -51,9 +52,22 @@ function RoomsSection() {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
+  const [detailsRoom, setDetailsRoom] = useState(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
   const handleOpenBooking = (room) => {
     setSelectedRoom(room);
     setIsBookingModalOpen(true);
+  };
+
+  const handleOpenDetails = (room) => {
+    setDetailsRoom(room);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleBookFromDetails = (room) => {
+    setIsDetailsModalOpen(false);
+    handleOpenBooking(room);
   };
 
   useEffect(() => {
@@ -294,11 +308,11 @@ function RoomsSection() {
                     <small>/ night</small>
                   </div>
 
-                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                  <div className="room-actions" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                     <button
                       type="button"
                       className="view-details-btn"
-                      onClick={() => handleOpenBooking(room)}
+                      onClick={() => handleOpenDetails(room)}
                       style={{
                         background: "transparent",
                         color: "inherit",
@@ -348,6 +362,21 @@ function RoomsSection() {
           adults,
         }}
         onBookingSuccess={handleBookingSuccess}
+      />
+
+      {/* Room Details & Amenities Modal */}
+      <RoomDetailsModal
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        room={detailsRoom}
+        onBookNow={handleBookFromDetails}
+        isAvailable={
+          availability === null ||
+          !detailsRoom ||
+          Boolean(
+            (availability.find((item) => item.id === detailsRoom.id)?.availableRooms ?? 1) > 0
+          )
+        }
       />
     </section>
   );

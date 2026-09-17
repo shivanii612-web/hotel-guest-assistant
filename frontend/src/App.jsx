@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
+import { Menu, X } from "lucide-react";
 import "./App.css";
 import RoomsSection from "./components/RoomsSection";
 import Experiences from "./components/Experiences";
@@ -19,6 +20,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [chatOpen, setChatOpen] = useState(true);
   const [activeNav, setActiveNav] = useState("home");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [isDiningModalOpen, setIsDiningModalOpen] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
@@ -58,8 +60,17 @@ function App() {
         }
       }
     };
+    const handleResize = () => {
+      if (window.innerWidth > 850) {
+        setMobileMenuOpen(false);
+      }
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const [messages, setMessages] = useState([
@@ -199,6 +210,7 @@ function App() {
           <button
             className="theme-btn"
             onClick={() => setDarkMode(!darkMode)}
+            aria-label="Toggle dark or light theme"
           >
             {darkMode ? "☀" : "☾"}
           </button>
@@ -219,8 +231,87 @@ function App() {
           >
             Book Now
           </button>
+
+          <button
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </header>
+
+      {/* Mobile Navigation Drawer */}
+      <div className={`mobile-nav-drawer ${mobileMenuOpen ? "open" : ""}`}>
+        <a
+          className={activeNav === "home" ? "active" : ""}
+          href="#home"
+          onClick={(e) => {
+            scrollToSection("home")(e);
+            setMobileMenuOpen(false);
+          }}
+        >
+          Home
+        </a>
+        <a
+          className={activeNav === "rooms" ? "active" : ""}
+          href="#rooms"
+          onClick={(e) => {
+            scrollToSection("rooms")(e);
+            setMobileMenuOpen(false);
+          }}
+        >
+          Rooms
+        </a>
+        <a
+          className={activeNav === "experiences" ? "active" : ""}
+          href="#experiences"
+          onClick={(e) => {
+            scrollToSection("experiences")(e);
+            setMobileMenuOpen(false);
+          }}
+        >
+          Experiences
+        </a>
+        <a
+          className={activeNav === "dining" ? "active" : ""}
+          href="#dining"
+          onClick={(e) => {
+            scrollToSection("dining")(e);
+            setMobileMenuOpen(false);
+          }}
+        >
+          Dining
+        </a>
+        <a
+          className={activeNav === "gallery" ? "active" : ""}
+          href="#gallery"
+          onClick={(e) => {
+            scrollToSection("gallery")(e);
+            setMobileMenuOpen(false);
+          }}
+        >
+          Gallery
+        </a>
+        <a
+          className={activeNav === "contact" ? "active" : ""}
+          href="#contact"
+          onClick={(e) => {
+            scrollToSection("contact")(e);
+            setMobileMenuOpen(false);
+          }}
+        >
+          Contact
+        </a>
+      </div>
+
+      {mobileMenuOpen && (
+        <div
+          className="mobile-nav-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
 
       <main>
         {/* ================= HERO ================= */}

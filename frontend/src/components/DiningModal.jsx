@@ -64,14 +64,15 @@ function DiningModal({ isOpen, onClose, onAskConcierge }) {
       }}
     >
       <div
+        className="dining-modal-container"
         style={{
           backgroundColor: "#141414",
           border: "1px solid rgba(255, 255, 255, 0.15)",
           borderRadius: "16px",
           width: "100%",
           maxWidth: "760px",
-          maxHeight: "88vh",
-          height: "88vh",
+          maxHeight: "90vh",
+          height: "90vh",
           color: "#ffffff",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.75)",
           display: "flex",
@@ -82,6 +83,7 @@ function DiningModal({ isOpen, onClose, onAskConcierge }) {
       >
         {/* Header */}
         <div
+          className="dining-modal-header"
           style={{
             padding: "20px 24px",
             borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
@@ -141,6 +143,7 @@ function DiningModal({ isOpen, onClose, onAskConcierge }) {
 
         {/* Timings Strip */}
         <div
+          className="dining-timings-strip"
           style={{
             background: "#191919",
             padding: "12px 24px",
@@ -186,6 +189,7 @@ function DiningModal({ isOpen, onClose, onAskConcierge }) {
 
         {/* Menu Categories Tab */}
         <div
+          className="dining-categories-strip"
           style={{
             padding: "12px 24px",
             display: "flex",
@@ -226,6 +230,7 @@ function DiningModal({ isOpen, onClose, onAskConcierge }) {
 
         {/* Menu Items Grid */}
         <div
+          className="dining-menu-body"
           style={{
             padding: "20px 24px",
             overflowY: "auto",
@@ -236,7 +241,7 @@ function DiningModal({ isOpen, onClose, onAskConcierge }) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(260px, 100%), 1fr))",
               gap: "14px",
             }}
           >
@@ -311,6 +316,7 @@ function DiningModal({ isOpen, onClose, onAskConcierge }) {
 
         {/* Footer Actions */}
         <div
+          className="dining-modal-footer"
           style={{
             padding: "16px 24px",
             borderTop: "1px solid rgba(255, 255, 255, 0.1)",

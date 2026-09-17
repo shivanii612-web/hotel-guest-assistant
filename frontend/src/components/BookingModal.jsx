@@ -250,6 +250,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
       }}
     >
       <div
+        className="booking-modal-container"
         style={{
           backgroundColor: "#141414",
           border: "1px solid rgba(255, 255, 255, 0.15)",
@@ -267,6 +268,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
       >
         {/* Header */}
         <div
+          className="booking-modal-header"
           style={{
             padding: "20px 24px",
             borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
@@ -320,7 +322,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
         </div>
 
         {/* Modal Body */}
-        <div style={{ padding: "24px" }}>
+        <div className="booking-modal-body" style={{ padding: "24px" }}>
           {/* Confirmed State */}
           {confirmedBooking ? (
             <div style={{ textAlign: "center", padding: "10px 0" }}>
@@ -368,6 +370,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
                 }}
               >
                 <div
+                  className="booking-receipt-row"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -377,12 +380,13 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
                   }}
                 >
                   <span style={{ color: "#a5a5a5" }}>Booking ID:</span>
-                  <span style={{ fontWeight: "700", color: "#ff6a00", fontFamily: "monospace" }}>
+                  <span style={{ fontWeight: "700", color: "#ff6a00", fontFamily: "monospace", wordBreak: "break-all" }}>
                     {confirmedBooking.bookingId || confirmedBooking._id}
                   </span>
                 </div>
 
                 <div
+                  className="booking-receipt-row"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -392,12 +396,13 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
                   }}
                 >
                   <span style={{ color: "#a5a5a5" }}>Payment ID:</span>
-                  <span style={{ fontWeight: "600", fontFamily: "monospace", color: "#22c55e" }}>
+                  <span style={{ fontWeight: "600", fontFamily: "monospace", color: "#22c55e", wordBreak: "break-all" }}>
                     {confirmedBooking.razorpayPaymentId}
                   </span>
                 </div>
 
                 <div
+                  className="booking-receipt-row"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -413,6 +418,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
                 </div>
 
                 <div
+                  className="booking-receipt-row"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -428,6 +434,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
                 </div>
 
                 <div
+                  className="booking-receipt-row"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -441,6 +448,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
                 </div>
 
                 <div
+                  className="booking-receipt-row"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -456,6 +464,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
                 </div>
 
                 <div
+                  className="booking-receipt-row"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -562,6 +571,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
               </div>
 
               <div
+                className="booking-modal-grid"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
@@ -634,6 +644,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
 
               {/* Dates & Counts */}
               <div
+                className="booking-modal-grid"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
@@ -704,6 +715,7 @@ function BookingModal({ isOpen, onClose, room, initialSearch, onBookingSuccess }
               </div>
 
               <div
+                className="booking-modal-grid"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",

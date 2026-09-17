@@ -75,6 +75,7 @@ function ExperienceModal({ isOpen, onClose, experience }) {
       }}
     >
       <div
+        className="experience-modal-container"
         style={{
           backgroundColor: "#141414",
           border: "1px solid rgba(255, 255, 255, 0.15)",
@@ -163,10 +164,11 @@ function ExperienceModal({ isOpen, onClose, experience }) {
 
         {/* Main Image Stage */}
         <div
+          className="experience-image-stage"
           style={{
             position: "relative",
             width: "100%",
-            height: "400px",
+            height: "clamp(240px, 46vh, 400px)",
             backgroundColor: "#0a0a0a",
             display: "flex",
             alignItems: "center",
@@ -210,6 +212,7 @@ function ExperienceModal({ isOpen, onClose, experience }) {
           {total > 1 && (
             <>
               <button
+                className="modal-nav-arrow modal-prev"
                 onClick={handlePrev}
                 aria-label="Previous image"
                 style={{
@@ -233,6 +236,7 @@ function ExperienceModal({ isOpen, onClose, experience }) {
               </button>
 
               <button
+                className="modal-nav-arrow modal-next"
                 onClick={handleNext}
                 aria-label="Next image"
                 style={{
@@ -261,13 +265,14 @@ function ExperienceModal({ isOpen, onClose, experience }) {
         {/* Thumbnail Navigation Strip */}
         {total > 1 && (
           <div
+            className="experience-thumbnail-strip"
             style={{
               padding: "14px 20px",
               background: "#161616",
               borderTop: "1px solid rgba(255, 255, 255, 0.08)",
               display: "flex",
               gap: "10px",
-              justifyContent: "center",
+              justifyContent: total > 4 ? "flex-start" : "center",
               overflowX: "auto",
               flexShrink: 0,
             }}
