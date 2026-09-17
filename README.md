@@ -4,6 +4,18 @@
 
 ---
 
+## Deployment
+
+### Frontend
+Deployed on Vercel:  
+[Open Live Demo](https://prashiv-hotel-guest-assistant.vercel.app/)
+
+### Backend
+Deployed on Render:  
+https://prashiv-hotel-backend.onrender.com
+
+The frontend communicates with the deployed backend through REST APIs.
+
 ## 1. Project Overview
 
 **PRASHIV Hotel Guest Assistant** is a modern, responsive web application designed for luxury hospitality. It pairs a guest-facing hotel portal with an intelligent AI Concierge that assists guests before, during, and after their stay.
